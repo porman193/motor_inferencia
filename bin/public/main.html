@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interfaz de Motor de Inferencia</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./javascripts/index.js" type="module"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Motor de Inferencia</h1>
+        <form id="inferenceForm">
+            <label for="facts">Hechos actuales:</label>
+            <textarea id="facts" name="facts" rows="5" readonly></textarea>
+            <br>  
+            <label for="rules">Reglas actuales:</label>
+            <textarea id="rules" name="rules" rows="5" readonly></textarea>
+            <br>
+            <div class="buttons_container">
+                <a href="./views/addRules" class="button">Crear nuevas reglas</a>
+                 <button class="button" type="submit">Inferir</button>
+            </div>
+    
+        </form>
+
+        <div id="results">
+            <!-- Aquí se mostrarán los resultados del motor de inferencia -->
+        </div>
+    </div>
+</body>
+
+</html>

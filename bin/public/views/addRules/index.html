@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/styleRules/style.css">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <title>Añadir Regla</title>
+    <script src="../../javascripts/newRule.js" type="module" ></script>
+</head>
+<body>
+    <form id="rules_form">
+        <h1>Añadir Regla</h1>
+        <div class="input_container">
+            <label for="conclusion">Conclusión:</label>
+            <input type="text" id="conclusion_input" name="conclusion_input" required>
+            <p>"Ejemplo: animal = perro"</p>
+        </div>
+        <div class="conditions_container">
+            <label for="conditions">Condiciones:</label>
+            <textarea name="conditions" id="conditions" cols="30" rows="10" required></textarea>
+            <p>"Escriba las condiciónes separadas por coma
+                ,Ejemplo: piel = cubierta de pelo,dientes = puntiagudos"</p>
+        </div>
+        <div class="buttons_container">
+            <button class="button" type="submit">Agregar</button>
+            <a href="../../main.html" class="button">Volver</a>
+        </div>
+    </form>
+</body>
+</html>

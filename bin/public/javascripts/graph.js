@@ -70,7 +70,8 @@ class Graph {
 
 }
 
-module.exports = {Node, Graph};
+export default Graph;
+export { Node };
 
 
 
