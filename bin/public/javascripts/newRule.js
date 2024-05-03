@@ -4,6 +4,22 @@ import InferenceEngine from './inference_engine.js';
 
 const graph = new Graph();
 const inference_engine = new InferenceEngine(graph);
+if (JSON.parse(localStorage.getItem('inference_engine'))) {
+    const storedEngine = JSON.parse(localStorage.getItem('inference_engine'));
+    let nodes = storedEngine.graph.nodes;
+    for (let node of nodes) {
+        let neighbors = node.neighbors;
+        let newNode = new Node(node.attribute, node.value);
+        for (let neighbor of neighbors) {
+            let newNeighbor = new Node(neighbor.attribute, neighbor.value);
+            newNode.addNeighbor(newNeighbor);
+        }
+        graph.addNode(newNode);
+    }
+    inference_engine.rules = storedEngine.rules;
+    inference_engine.facts = storedEngine.facts;
+}  
+console.log(inference_engine);
 
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('rules_form');
