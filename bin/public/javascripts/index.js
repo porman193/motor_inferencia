@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const conditions = rule.conditions.map(condition => `${condition.attribute}=${condition.value}`).join(' Y ');
                 return `Si ${conditions} -> ${conclusion} `;
             }).join('\n');
+            console.log('Resultados encontrados:', results);
             resultDiv.style.display = 'block'; // Muestra el div de resultados
             resultTextArea.value = "Para llegar a la conclusión "+inferValue+" se deben cumplir las siguientes reglas: \n"+resultsText;
         } else {
