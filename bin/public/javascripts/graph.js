@@ -31,7 +31,7 @@ class Graph {
 
     addNode(node) {
         for (let n of this.nodes) {
-            if (n.getValue() == node.getValue()) {
+            if (n.getValue() === node.getValue() && n.getAttribute() === node.getAttribute()) { 
                 return null;
             }
         }
@@ -41,7 +41,7 @@ class Graph {
 
     addNeighborsToNode(node, neighbors) {
        for(let n of this.nodes) {
-            if(n.getValue() == node.getValue() && n.getAttribute() == n.getAttribute()){
+            if(n.getValue() === node.getValue() && n.getAttribute() === node.getAttribute()){
                 for(let neighbor of neighbors) {
                     n.addNeighbor(neighbor); // Añadir vecinos a un nodo
                 }
@@ -52,6 +52,10 @@ class Graph {
 
     getNode(node) {
         return this.nodes.find(n => n.getValue() == node.getValue() && n.getAttribute() == node.getAttribute()); // Obtener un nodo del grafo
+    }
+
+    getNodeByValueAndAttribute(value, attribute) {
+        return this.nodes.find(n => n.getValue() == value && n.getAttribute() == attribute); // Obtener un nodo del grafo
     }
 
     getNodes() {

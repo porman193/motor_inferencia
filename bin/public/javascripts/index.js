@@ -10,14 +10,16 @@ if (JSON.parse(localStorage.getItem('inference_engine'))) {
     for (let node of nodes) {
         let neighbors = node.neighbors;
         let newNode = new Node(node.attribute, node.value);
-        for (let neighbor of neighbors) {
-            let newNeighbor = new Node(neighbor.attribute, neighbor.value);
-            newNode.addNeighbor(newNeighbor);
+        if(neighbors){
+            for (let neighbor of neighbors) {
+                let newNeighbor = new Node(neighbor.attribute, neighbor.value);
+                newNode.addNeighbor(newNeighbor);
+            }
         }
         graph.addNode(newNode);
     }
     inference_engine.rules = storedEngine.rules;
-    inference_engine.facts = storedEngine.facts;
+    inference_engine.findFacts();
 }   
 document.addEventListener('DOMContentLoaded', function() {
     const rulesTextArea = document.getElementById('rules');
@@ -64,5 +66,44 @@ document.addEventListener('DOMContentLoaded', function() {
         rulesTextArea.value = '';
         alert('Motor de inferencia reiniciado');
         console.log('Motor reiniciado');
+        window.location.href = './main.html';
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const inferButton = document.getElementById('inferButton');
+    const resultTextArea = document.getElementById('resultsText');
+    const resultDiv = document.getElementById('results');
+    const inferInput = document.getElementById('infer');
+
+    inferButton.addEventListener('click', function() {
+        // Obtenemos el valor ingresado en el campo de inferencia
+        const inferValue = inferInput.value.trim();
+
+        // Verificamos si el valor cumple con el formato esperado "atributo=valor"
+        const inferRegex = /^[a-zA-Z0-9\s]+=[a-zA-Z0-9\s]+$/;
+        if (!inferRegex.test(inferValue)) {
+            alert('Por favor, ingrese la conclusión en el formato correcto: "atributo=valor"');
+            return; // Detener la ejecución si el formato es incorrecto
+        }
+
+        console.log("Realizando inferencia...");
+        const conclusionParts = inferValue.split('=');
+        const searchNode = new Node(conclusionParts[0].trim(), conclusionParts[1].trim());
+        const results = inference_engine.backwardChain(searchNode);
+
+        if (results.length > 0) {
+            const resultsText = results.map(rule => {
+                const conclusion = `${rule.conclusion.attribute}=${rule.conclusion.value}`;
+                const conditions = rule.conditions.map(condition => `${condition.attribute}=${condition.value}`).join(' Y ');
+                return `Si ${conditions} -> ${conclusion} `;
+            }).join('\n');
+            resultDiv.style.display = 'block'; // Muestra el div de resultados
+            resultTextArea.value = "Para llegar a la conclusión "+inferValue+" se deben cumplir las siguientes reglas: \n"+resultsText;
+        } else {
+            resultDiv.style.display = 'none'; // Oculta el div de resultados si no se encontraron resultados
+            resultTextArea.value = ""; // Limpia el área de texto
+            alert('No se encontraron resultados');
+        }
     });
 });

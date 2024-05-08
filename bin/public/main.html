@@ -22,13 +22,26 @@
             <div class="buttons_container">
                 <a href="#" class="button" id="addRulesLink">Crear nuevas reglas</a>
                 <button class="button" type="button" id="resetEngineBtn">Reiniciar Motor</button>
-                 <button class="button" type="submit">Inferir</button>
+                 
+            </div>
+            <div>
+                <h2>Realizar inferencia hacia atras</h2>
+                <div class="infer_div">
+                    <div class="input">
+                        <label for="infer">Inferir:</label>
+                        <input type="text" id="infer" name="infer">
+                        <p>"Igrese la conclusion como atributo=valor"</p>
+                    </div>
+                    <button class="button" type="button" id="inferButton">Inferir</button>
+                </div>
+             
             </div>
     
         </form>
 
         <div id="results">
-            <!-- Aquí se mostrarán los resultados del motor de inferencia -->
+            <h2>Resultados</h2>
+            <textarea id="resultsText" name="results" rows="5" readonly></textarea>
         </div>
     </div>
 </body>

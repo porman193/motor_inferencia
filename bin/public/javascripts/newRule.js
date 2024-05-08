@@ -7,20 +7,22 @@ const inference_engine = new InferenceEngine(graph);
 if (JSON.parse(localStorage.getItem('inference_engine'))) {
     const storedEngine = JSON.parse(localStorage.getItem('inference_engine'));
     let nodes = storedEngine.graph.nodes;
+    console.log(nodes)
     for (let node of nodes) {
         let neighbors = node.neighbors;
         let newNode = new Node(node.attribute, node.value);
-        for (let neighbor of neighbors) {
-            let newNeighbor = new Node(neighbor.attribute, neighbor.value);
-            newNode.addNeighbor(newNeighbor);
+        if(neighbors){
+            for (let neighbor of neighbors) {
+                let newNeighbor = new Node(neighbor.attribute, neighbor.value);
+                newNode.addNeighbor(newNeighbor);
+            }
         }
         graph.addNode(newNode);
     }
     inference_engine.rules = storedEngine.rules;
     inference_engine.facts = storedEngine.facts;
 }  
-console.log(inference_engine);
-
+console.log(inference_engine)
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('rules_form');
     form.addEventListener('submit', function(event) {
@@ -31,8 +33,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const conditionsText = document.getElementById('conditions').value.trim();
 
         // Verificar si los datos tienen el formato correcto
-        const conclusionRegex = /^[a-zA-Z]+=[a-zA-Z]+$/;
-        const conditionsRegex = /^([a-zA-Z]+=[a-zA-Z]+)(,[a-zA-Z]+=[a-zA-Z]+)*$/;
+        const conclusionRegex = /^[a-zA-Z0-9\s]+=[a-zA-Z0-9\s]+$/;
+        const conditionsRegex = /^([a-zA-Z0-9\s]+=[a-zA-Z0-9\s]+)(,[a-zA-Z0-9\s]+=[a-zA-Z0-9\s]+)*$/;
 
         if (!conclusionRegex.test(conclusion)) {
             alert('El formato de la conclusión no es válido. Debe ser "atributo=valor".');
@@ -59,14 +61,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Crear una regla con la conclusión y las condiciones
         inference_engine.createRule(conclusionNode, conditionsNodeArray);
-        inference_engine.findFacts();
-        // Si los datos tienen el formato correcto, hacer algo con ellos
-        console.log('Conclusión:', conclusionNode);
-        console.log('Condiciones:', conditionsNodeArray);
-        console.log('Reglas:', inference_engine.rules);
-        console.log('Hechos:', inference_engine.facts);
 
         // Guardar las reglas en el almacenamiento local
+        console.log(inference_engine.graph)
         localStorage.setItem('inference_engine', JSON.stringify(inference_engine));
 
         // Limpiar los campos de entrada después de guardar la regla
@@ -75,6 +72,5 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Mostrar una alerta indicando que la regla ha sido guardada
         alert('Regla guardada');
-
     });
 });

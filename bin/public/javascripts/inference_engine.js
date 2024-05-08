@@ -17,31 +17,49 @@ class InferenceEngine {
 
   findFacts() {
     let nodes = this.graph.getNodes();
-   
     for (let node of nodes) {
       if (node.getNeighbors().length == 0 && !this.facts.includes(node)) {
         this.facts.push(node);
       }
     }
-  }
 
-  backwardChain(conclusion) {
-    for (let rule of this.rules) {
-      if (rule.conclusion.value === conclusion) {
-        let conditionsMet = true;
-        for (let condition of rule.conditions) {
-          if (!this.facts.includes(condition)) {
-            conditionsMet = false;
-            this.backwardChain(condition.value);
-          }
-        }
-        if (conditionsMet) {
-          console.log(`Se cumple la regla: ${rule.conclusion.attribute}=${rule.conclusion.value} -> ${rule.conditions.map(c => `${c.attribute}=${c.value}`).join(' Y ')}`);
-        }
-        
-      }
+  } 
+  backwardChain(conclusionTofind, rulesFound = []) {
+    let searchAttribute = conclusionTofind.attribute;
+    let searchValue = conclusionTofind.value;
+
+    // Verificar si el hecho ya está en los hechos conocidos
+    if (this.facts.some(fact => fact.attribute === searchAttribute && fact.value === searchValue)) {
+        return conclusionTofind.attribute + '=' + conclusionTofind.value;
     }
-  }
+
+    for (let rule of this.rules) {
+        if (rule.conclusion.value === searchValue && rule.conclusion.attribute === searchAttribute) {
+            let conditionsMet = true;
+            for (let condition of rule.conditions) {
+                // Verificar si la condición ya es un hecho conocido
+                if (!this.facts.some(fact => fact.attribute === condition.attribute && fact.value === condition.value)) {
+                    // Si no es un hecho conocido, recursivamente realizar la inferencia hacia atrás
+                    let conditionNode = this.graph.getNodeByValueAndAttribute(condition.value, condition.attribute);
+                    let inferredConclusion = this.backwardChain(conditionNode, rulesFound);
+                    
+                    // Verificar si se encontró la conclusión
+                    if (!inferredConclusion) {
+                        conditionsMet = false;
+                        break;
+                    }
+                }
+            }
+            // Si todas las condiciones se cumplieron, agregar la regla encontrada al array de reglas
+            if (conditionsMet) {
+                rulesFound.push(rule);
+            }
+        }
+    }
+    // Devolver el array de reglas encontradas
+    return rulesFound;
+}
+
 
 }
 
